@@ -1,0 +1,30 @@
+# Secrets
+.env
+
+# Data volumes
+data/
+
+# Java
+backend/target/
+*.jar
+
+# Node
+node_modules/
+frontend/.output/
+frontend/.nuxt/
+ws-gateway/dist/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Backups
+backup/
