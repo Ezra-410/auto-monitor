@@ -1,7 +1,7 @@
 package com.monitor.backend.api;
 
 import com.monitor.backend.entity.Project;
-import com.monitor.backend.repo.Repositories.ProjectRepository;
+import com.monitor.backend.repo.ProjectRepository;
 import com.monitor.backend.security.AuthUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;

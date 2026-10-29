@@ -20,7 +20,10 @@ public class WsEventPublisher {
 
     public WsEventPublisher(@Value("${app.ws-url}") String wsUrl,
                             @Value("${app.internal-token:}") String internalToken) {
-        this.http = RestClient.builder().baseUrl(wsUrl).build();
+        this.http = RestClient.builder()
+                .baseUrl(wsUrl)
+                .requestFactory(AgentClient.http11Factory())
+                .build();
         this.internalToken = internalToken;
     }
 

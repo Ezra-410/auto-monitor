@@ -3,7 +3,7 @@ package com.monitor.backend.api;
 import com.monitor.backend.entity.Enums;
 import com.monitor.backend.entity.Objective;
 import com.monitor.backend.entity.Project;
-import com.monitor.backend.repo.Repositories.ObjectiveRepository;
+import com.monitor.backend.repo.ObjectiveRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class ObjectiveController {
     @Transactional(readOnly = true)
     public List<Objective> list(@RequestParam("project_id") Long projectId) {
         support.requireAccess(projectId);
-        return objectives.findByProjectId(projectId);
+        return objectives.findByProject_Id(projectId);
     }
 
     public record Upsert(Long project_id, String title, String description,

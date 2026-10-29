@@ -2,8 +2,8 @@ package com.monitor.backend.service;
 
 import com.monitor.backend.entity.Role;
 import com.monitor.backend.entity.User;
-import com.monitor.backend.repo.Repositories.RoleRepository;
-import com.monitor.backend.repo.Repositories.UserRepository;
+import com.monitor.backend.repo.RoleRepository;
+import com.monitor.backend.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

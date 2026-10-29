@@ -3,9 +3,9 @@ package com.monitor.backend.api;
 import com.monitor.backend.entity.Project;
 import com.monitor.backend.entity.Repo;
 import com.monitor.backend.entity.User;
-import com.monitor.backend.repo.Repositories.ProjectRepository;
-import com.monitor.backend.repo.Repositories.RepoRepository;
-import com.monitor.backend.repo.Repositories.UserRepository;
+import com.monitor.backend.repo.ProjectRepository;
+import com.monitor.backend.repo.RepoRepository;
+import com.monitor.backend.repo.UserRepository;
 import com.monitor.backend.security.AuthUser;
 import com.monitor.backend.security.CryptoService;
 import jakarta.validation.constraints.NotBlank;
@@ -40,7 +40,7 @@ public class ProjectController {
     @Transactional(readOnly = true)
     public List<Map<String, Object>> list() {
         AuthUser user = ApiSupport.currentUser();
-        List<Project> found = user.isAdmin() ? projects.findAll() : projects.findByOwnerId(user.id());
+        List<Project> found = user.isAdmin() ? projects.findAll() : projects.findByOwner_Id(user.id());
         return found.stream().map(this::toJson).toList();
     }
 
@@ -66,7 +66,7 @@ public class ProjectController {
     public Map<String, Object> detail(@PathVariable Long id) {
         Project p = support.requireAccess(id);
         Map<String, Object> json = new java.util.HashMap<>(toJson(p));
-        json.put("repositories", repos.findByProjectId(id).stream().map(r -> Map.of(
+        json.put("repositories", repos.findByProject_Id(id).stream().map(r -> Map.of(
                 "id", r.getId(),
                 "url", r.getUrl(),
                 "branch", r.getBranch())).toList());

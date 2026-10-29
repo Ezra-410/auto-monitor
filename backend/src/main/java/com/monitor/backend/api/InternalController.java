@@ -2,7 +2,7 @@ package com.monitor.backend.api;
 
 import com.monitor.backend.entity.*;
 import com.monitor.backend.entity.Enums;
-import com.monitor.backend.repo.Repositories.*;
+import com.monitor.backend.repo.*;
 import com.monitor.backend.security.CryptoService;
 import com.monitor.backend.service.WsEventPublisher;
 import jakarta.validation.Valid;
@@ -72,10 +72,10 @@ public class InternalController {
         ctx.put("project", Map.of("id", p.getId(), "name", p.getName(),
                 "owner_id", p.getOwner().getId(),
                 "description", p.getDescription() == null ? "" : p.getDescription()));
-        ctx.put("objectives", objectives.findByProjectId(id));
-        ctx.put("tasks", tasks.findByProjectId(id));
-        ctx.put("bugs", bugs.findByProjectId(id));
-        ctx.put("repositories", repos.findByProjectId(id).stream()
+        ctx.put("objectives", objectives.findByProject_Id(id));
+        ctx.put("tasks", tasks.findByProject_Id(id));
+        ctx.put("bugs", bugs.findByProject_Id(id));
+        ctx.put("repositories", repos.findByProject_Id(id).stream()
                 .map(r -> Map.of("id", r.getId(), "url", r.getUrl(), "branch", r.getBranch()))
                 .toList());
         return ctx;
@@ -102,7 +102,7 @@ public class InternalController {
     @GetMapping("/objectives")
     @Transactional(readOnly = true)
     public List<Objective> listObjectives(@RequestParam("project_id") Long projectId) {
-        return objectives.findByProjectId(projectId);
+        return objectives.findByProject_Id(projectId);
     }
 
     @PostMapping("/objectives")
@@ -145,7 +145,7 @@ public class InternalController {
     @GetMapping("/tasks")
     @Transactional(readOnly = true)
     public List<Task> listTasks(@RequestParam("project_id") Long projectId) {
-        return tasks.findByProjectId(projectId);
+        return tasks.findByProject_Id(projectId);
     }
 
     @PostMapping("/tasks")
@@ -200,7 +200,7 @@ public class InternalController {
     @GetMapping("/bugs")
     @Transactional(readOnly = true)
     public List<Bug> listBugs(@RequestParam("project_id") Long projectId) {
-        return bugs.findByProjectId(projectId);
+        return bugs.findByProject_Id(projectId);
     }
 
     @PostMapping("/bugs")
@@ -252,7 +252,7 @@ public class InternalController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur inconnu"));
         Conversation conv = (req.conversation_id() != null
                 ? conversations.findById(req.conversation_id())
-                : conversations.findByProjectIdAndUserId(p.getId(), user.getId()))
+                : conversations.findByProject_IdAndUser_Id(p.getId(), user.getId()))
                 .orElseGet(() -> {
                     Conversation c = new Conversation();
                     c.setProject(p);
@@ -271,7 +271,7 @@ public class InternalController {
     @GetMapping("/conversations/{id}/messages")
     @Transactional(readOnly = true)
     public List<Message> recentMessages(@PathVariable Long id) {
-        return messages.findTop50ByConversationIdOrderByIdDesc(id);
+        return messages.findTop50ByConversation_IdOrderByIdDesc(id);
     }
 
     // ---------- Helpers ----------

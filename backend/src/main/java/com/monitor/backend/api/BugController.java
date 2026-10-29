@@ -3,8 +3,8 @@ package com.monitor.backend.api;
 import com.monitor.backend.entity.Bug;
 import com.monitor.backend.entity.Enums;
 import com.monitor.backend.entity.Project;
-import com.monitor.backend.repo.Repositories.BugRepository;
-import com.monitor.backend.repo.Repositories.TaskRepository;
+import com.monitor.backend.repo.BugRepository;
+import com.monitor.backend.repo.TaskRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,7 @@ public class BugController {
     @Transactional(readOnly = true)
     public List<Bug> list(@RequestParam("project_id") Long projectId) {
         support.requireAccess(projectId);
-        return bugs.findByProjectId(projectId);
+        return bugs.findByProject_Id(projectId);
     }
 
     public record Upsert(Long project_id, String title, String description,

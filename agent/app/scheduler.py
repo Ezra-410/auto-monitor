@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import logging
 from datetime import UTC, datetime
 
@@ -57,16 +56,15 @@ class AgentScheduler:
             log.warning("drain actions en échec: %s", e)
 
     def start(self) -> None:
+        # AsyncIOScheduler exécute les fonctions coroutine dans la boucle — pas de lambda create_task
         self.scheduler.add_job(
-            lambda: asyncio.create_task(self.heartbeat()),
-            "interval", minutes=settings.heartbeat_minutes, id="heartbeat",
-            next_run_time=datetime.now(UTC))
+            self.heartbeat, "interval", minutes=settings.heartbeat_minutes,
+            id="heartbeat", next_run_time=datetime.now(UTC))
         self.scheduler.add_job(
-            lambda: asyncio.create_task(self.poll_jobs()),
-            "interval", seconds=settings.subagent_poll_seconds, id="job-poller")
+            self.poll_jobs, "interval", seconds=settings.subagent_poll_seconds,
+            id="job-poller")
         self.scheduler.add_job(
-            lambda: asyncio.create_task(self.drain_actions()),
-            "interval", seconds=30, id="action-drain")
+            self.drain_actions, "interval", seconds=30, id="action-drain")
         self.scheduler.start()
         log.info("scheduler démarré (heartbeat=%smin, poller=%ss)",
                  settings.heartbeat_minutes, settings.subagent_poll_seconds)

@@ -1,7 +1,7 @@
 package com.monitor.backend.api;
 
 import com.monitor.backend.entity.User;
-import com.monitor.backend.repo.Repositories.UserRepository;
+import com.monitor.backend.repo.UserRepository;
 import com.monitor.backend.security.AuthUser;
 import com.monitor.backend.security.JwtService;
 import jakarta.validation.Valid;

@@ -13,10 +13,14 @@ import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPrivateCrtKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.time.Duration;
 import java.time.Instant;
@@ -42,7 +46,9 @@ public class JwtService {
             byte[] decoded = Base64.getDecoder().decode(base64Key.trim());
             String asText = new String(decoded);
             byte[] der;
+            boolean pkcs1 = false;
             if (asText.contains("BEGIN")) {
+                pkcs1 = asText.contains("BEGIN RSA PRIVATE KEY");
                 String pem = asText.replaceAll("-----BEGIN [^-]+-----", "")
                         .replaceAll("-----END [^-]+-----", "")
                         .replaceAll("\\s", "");
@@ -51,7 +57,11 @@ public class JwtService {
                 der = decoded;
             }
             KeyFactory kf = KeyFactory.getInstance("RSA");
-            this.privateKey = (RSAPrivateCrtKey) kf.generatePrivate(new PKCS8EncodedKeySpec(der));
+            if (pkcs1) {
+                this.privateKey = (RSAPrivateCrtKey) kf.generatePrivate(pkcs1ToSpec(der));
+            } else {
+                this.privateKey = (RSAPrivateCrtKey) kf.generatePrivate(new PKCS8EncodedKeySpec(der));
+            }
             this.publicKey = (RSAPublicKey) kf.generatePublic(
                     new RSAPublicKeySpec(privateKey.getModulus(), privateKey.getPublicExponent()));
         } catch (Exception e) {
@@ -104,5 +114,43 @@ public class JwtService {
     public Map<String, Object> jwks() {
         RSAKey jwk = new RSAKey.Builder(publicKey).keyID(KEY_ID).build();
         return new JWKSet(jwk.toPublicJWK()).toJSONObject();
+    }
+
+    /**
+     * Parse une clé RSA PKCS1 (BEGIN RSA PRIVATE KEY) en RSAPrivateCrtKeySpec.
+     * RSAPrivateKey ::= SEQUENCE { version, n, e, d, p, q, dp, dq, qinv }
+     */
+    private static RSAPrivateCrtKeySpec pkcs1ToSpec(byte[] der) throws Exception {
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(der));
+        if (in.readUnsignedByte() != 0x30) {
+            throw new IllegalArgumentException("DER: SEQUENCE attendue");
+        }
+        readDerLength(in);
+        BigInteger[] ints = new BigInteger[9];
+        for (int i = 0; i < 9; i++) {
+            int tag = in.readUnsignedByte();
+            if (tag != 0x02) {
+                throw new IllegalArgumentException("DER: INTEGER attendu, tag=" + tag);
+            }
+            int len = readDerLength(in);
+            byte[] val = new byte[len];
+            in.readFully(val);
+            ints[i] = new BigInteger(val);
+        }
+        return new RSAPrivateCrtKeySpec(ints[1], ints[2], ints[3],
+                ints[4], ints[5], ints[6], ints[7], ints[8]);
+    }
+
+    private static int readDerLength(DataInputStream in) throws Exception {
+        int b = in.readUnsignedByte();
+        if ((b & 0x80) == 0) {
+            return b;
+        }
+        int numBytes = b & 0x7F;
+        int len = 0;
+        for (int i = 0; i < numBytes; i++) {
+            len = (len << 8) | in.readUnsignedByte();
+        }
+        return len;
     }
 }

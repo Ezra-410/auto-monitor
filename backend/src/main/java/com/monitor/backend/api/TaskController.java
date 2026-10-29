@@ -3,9 +3,9 @@ package com.monitor.backend.api;
 import com.monitor.backend.entity.Enums;
 import com.monitor.backend.entity.Project;
 import com.monitor.backend.entity.Task;
-import com.monitor.backend.repo.Repositories.ObjectiveRepository;
-import com.monitor.backend.repo.Repositories.TaskRepository;
-import com.monitor.backend.repo.Repositories.UserRepository;
+import com.monitor.backend.repo.ObjectiveRepository;
+import com.monitor.backend.repo.TaskRepository;
+import com.monitor.backend.repo.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +35,7 @@ public class TaskController {
     @Transactional(readOnly = true)
     public List<Task> list(@RequestParam("project_id") Long projectId) {
         support.requireAccess(projectId);
-        return tasks.findByProjectId(projectId);
+        return tasks.findByProject_Id(projectId);
     }
 
     public record Upsert(Long project_id, Long objective_id, String title, String description,

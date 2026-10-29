@@ -2,8 +2,8 @@ package com.monitor.backend.api;
 
 import com.monitor.backend.entity.Conversation;
 import com.monitor.backend.entity.Message;
-import com.monitor.backend.repo.Repositories.ConversationRepository;
-import com.monitor.backend.repo.Repositories.MessageRepository;
+import com.monitor.backend.repo.ConversationRepository;
+import com.monitor.backend.repo.MessageRepository;
 import com.monitor.backend.security.AuthUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class ConversationController {
     public List<Conversation> list(@RequestParam("project_id") Long projectId) {
         AuthUser user = ApiSupport.currentUser();
         support.requireAccess(projectId);
-        return conversations.findByProjectId(projectId).stream()
+        return conversations.findByProject_Id(projectId).stream()
                 .filter(c -> user.isAdmin() || c.getUserId().equals(user.id()))
                 .toList();
     }
@@ -46,6 +46,6 @@ public class ConversationController {
         if (!user.isAdmin() && !c.getUserId().equals(user.id())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        return messages.findByConversationIdOrderByIdAsc(id);
+        return messages.findByConversation_IdOrderByIdAsc(id);
     }
 }

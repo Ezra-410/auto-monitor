@@ -30,7 +30,7 @@ management:
         liveness:
           include: livenessState
         readiness:
-          include: readinessState,db,flyway,jwks,agent
+          include: readinessState,db,jwks,agent
 
 app:
   internal-token: ${INTERNAL_API_TOKEN:}

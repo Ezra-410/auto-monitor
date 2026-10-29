@@ -5,9 +5,9 @@ import com.monitor.backend.entity.Enums;
 import com.monitor.backend.entity.Message;
 import com.monitor.backend.entity.Project;
 import com.monitor.backend.entity.User;
-import com.monitor.backend.repo.Repositories.ConversationRepository;
-import com.monitor.backend.repo.Repositories.MessageRepository;
-import com.monitor.backend.repo.Repositories.UserRepository;
+import com.monitor.backend.repo.ConversationRepository;
+import com.monitor.backend.repo.MessageRepository;
+import com.monitor.backend.repo.UserRepository;
 import com.monitor.backend.security.AuthUser;
 import com.monitor.backend.service.AgentClient;
 import jakarta.validation.Valid;
@@ -58,7 +58,7 @@ public class ChatController {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
         } else {
-            conv = conversations.findByProjectIdAndUserId(project.getId(), current.id())
+            conv = conversations.findByProject_IdAndUser_Id(project.getId(), current.id())
                     .orElseGet(() -> {
                         Conversation c = new Conversation();
                         c.setProject(project);

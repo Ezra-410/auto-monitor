@@ -4,9 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.net.http.HttpClient;
+import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -22,7 +25,11 @@ public class AgentClient {
     public AgentClient(@Value("${app.agent-url}") String agentUrl,
                        @Value("${app.internal-token:}") String internalToken) {
         this.agentUrl = agentUrl;
-        this.http = RestClient.builder().baseUrl(agentUrl).build();
+        // HTTP/1.1 forcé : uvicorn ne gère pas l'upgrade h2c tenté par java.net.http
+        this.http = RestClient.builder()
+                .baseUrl(agentUrl)
+                .requestFactory(http11Factory())
+                .build();
         this.internalToken = internalToken;
     }
 
@@ -48,9 +55,20 @@ public class AgentClient {
         });
     }
 
+    static JdkClientHttpRequestFactory http11Factory() {
+        HttpClient client = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .connectTimeout(Duration.ofSeconds(5))
+                .build();
+        return new JdkClientHttpRequestFactory(client);
+    }
+
     public boolean ping() {
         try {
-            return RestClient.create().get()
+            return RestClient.builder()
+                    .requestFactory(http11Factory())
+                    .build()
+                    .get()
                     .uri(agentUrl + "/healthz")
                     .retrieve()
                     .toBodilessEntity()
