@@ -30,6 +30,8 @@ group() {
 
 mkdir -p ldif
 {
+     printf 'dn: cn=keycloak-bind,ou=services,dc=conote,dc=edu\nobjectClass: organizationalRole\nobjectClass: simpleSecurityObject\ncn: keycloak-bind\ndescription: Read-only bind account used by Keycloak user federation\nuserPassword: %s\n\n' "$(ssha "$KC_LDAP_BIND_PASSWORD")"
+
   printf 'dn: dc=conote,dc=edu\nobjectClass: dcObject\nobjectClass: organization\ndc: conote\no: Co-Note Institution\n\n'
   ou students       "Student accounts"
   ou teachers       "Teaching staff accounts"

@@ -1,0 +1,26 @@
+# 1) load module (as EXTERNAL via ldapi):   add olcModuleLoad: ppolicy.so to the olcModuleList entry
+# 2) policy entry (as cn=admin):
+dn: ou=policies,dc=conote,dc=edu
+objectClass: organizationalUnit
+ou: policies
+
+dn: cn=default,ou=policies,dc=conote,dc=edu
+objectClass: device
+objectClass: pwdPolicy
+cn: default
+pwdAttribute: userPassword
+pwdLockout: TRUE
+pwdMaxFailure: 5
+pwdLockoutDuration: 900
+pwdFailureCountInterval: 900
+
+# 3) overlay (as EXTERNAL via ldapi), <MDB_DN> = database with olcSuffix dc=conote,dc=edu:
+# dn: olcOverlay=ppolicy,<MDB_DN>
+# objectClass: olcOverlayConfig
+# objectClass: olcPPolicyConfig
+# olcOverlay: ppolicy
+# olcPPolicyDefault: cn=default,ou=policies,dc=conote,dc=edu
+# olcPPolicyUseLockout: TRUE
+#
+# Disable a user:  replace: pwdAccountLockedTime / pwdAccountLockedTime: 000001010000Z
+# Re-enable:       delete: pwdAccountLockedTime
