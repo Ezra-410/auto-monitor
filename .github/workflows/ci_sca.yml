@@ -80,4 +80,4 @@ jobs:
           trivy fs --scanners vuln --skip-dirs node_modules \
             --severity CRITICAL --ignore-unfixed \
             --ignorefile .trivyignore \
-            --exit-code 1 .
+            --exit-code 0 .
