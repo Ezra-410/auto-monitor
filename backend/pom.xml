@@ -19,7 +19,7 @@
   <properties>
     <java.version>21</java.version>
     <!-- SEC: CVE remediation (CDL image scan 2026-11-07) -->
-    <tomcat.version><NEWEST></tomcat.version>
+    <tomcat.version>10.1.61</tomcat.version>
     <spring-security.version>6.5.9</spring-security.version>
     <nimbus.version>9.47</nimbus.version>
   </properties>
