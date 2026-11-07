@@ -16,7 +16,7 @@ LABEL org.opencontainers.image.title="auto-monitor-ws-gateway" \
       org.opencontainers.image.description="WebSocket gateway of auto-monitor" \
       org.opencontainers.image.licenses="MIT"
 ENV NODE_ENV=production
-RUN apk upgrade --no-cache
+RUN apk upgrade --no-cache && npm install -g minimist@1.2.5
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --no-audit --no-fund --ignore-scripts && npm cache clean --force
