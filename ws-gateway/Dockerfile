@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 # ---------- stage 2: runtime (production dependencies only) ----------
-FROM node:22-alpine AS runtime
+FRM node:22-alpine AS runtime
 LABEL org.opencontainers.image.title="auto-monitor-ws-gateway" \
       org.opencontainers.image.description="WebSocket gateway of auto-monitor" \
       org.opencontainers.image.licenses="MIT"
