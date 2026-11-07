@@ -1,6 +1,10 @@
 from app.prompts import extract_json
 
 
+def test_deliberate_failure():
+    assert 1 == 2, "deliberate failure (M2 test)"
+
+
 def test_extract_json_pur():
     assert extract_json('{"a": 1}') == {"a": 1}
 
