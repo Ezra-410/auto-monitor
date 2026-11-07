@@ -4,4 +4,5 @@ dn:uid=student02,ou=students,dc=conote,dc=edu
 dn:uid=student01,ou=students,dc=conote,dc=edu
 == lock attribute on student02 ==
 dn: uid=student02,ou=students,dc=conote,dc=edu
+pwdAccountLockedTime: 000001010000Z
 
