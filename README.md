@@ -78,3 +78,5 @@ docker run --rm -v "$PWD/agent":/a -w /a python:3.12-slim sh -c "pip install -q 
 cd ws-gateway && npm install && npm run build && npx vitest run
 cd ../frontend && npm install && npm run typecheck && npm run build
 ```
+
+> Delivered through a secure CI/CD pipeline (CYB 319).
