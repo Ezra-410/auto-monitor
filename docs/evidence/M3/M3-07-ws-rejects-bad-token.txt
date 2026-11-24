@@ -1,0 +1,2 @@
+== WebSocket upgrade with a garbage token (expect connection closed, no 101) ==
+HTTP 000

@@ -1,0 +1,11 @@
+
+ RUN  v2.1.9 /app
+
+ ✓ src/hub.test.ts (4 tests) 48ms
+ ✓ src/auth.test.ts (5 tests) 701ms
+
+ Test Files  2 passed (2)
+      Tests  9 passed (9)
+   Start at  18:34:00
+   Duration  1.71s (transform 426ms, setup 0ms, collect 567ms, tests 749ms, environment 1ms, prepare 334ms)
+
