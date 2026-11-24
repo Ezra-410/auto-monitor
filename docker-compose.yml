@@ -131,7 +131,7 @@ services:
     restart: unless-stopped
     depends_on:
       postgres: { condition: service_healthy}
-      backend: { condition: service_started }
+      backend: { condition: service_healthy }
     environment:
       PORT: 4000
       BACKEND_URL: http://backend:8080
