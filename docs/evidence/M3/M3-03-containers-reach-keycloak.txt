@@ -1,0 +1,3 @@
+monitor-backend   {"realm":"conote","public_key":"MIIBIjANBgkqhkiG9w0BAQEFAAOC
+monitor-ws        {"realm":"conote","public_key":"MIIBIjANBgkqhkiG9w0BAQEFAAOC
+monitor-frontend  {"realm":"conote","public_key":"MIIBIjANBgkqhkiG9w0BAQEFAAOC

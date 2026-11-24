@@ -1,0 +1,11 @@
+{
+  "issuer": "http://keycloak.conote.local:8180/realms/conote",
+  "authorization_endpoint": "http://keycloak.conote.local:8180/realms/conote/protocol/openid-connect/auth",
+  "token_endpoint": "http://keycloak.conote.local:8180/realms/conote/protocol/openid-connect/token",
+  "jwks_uri": "http://keycloak.conote.local:8180/realms/conote/protocol/openid-connect/certs",
+  "end_session_endpoint": "http://keycloak.conote.local:8180/realms/conote/protocol/openid-connect/logout",
+  "code_challenge_methods_supported": [
+    "plain",
+    "S256"
+  ]
+}

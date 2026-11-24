@@ -1,0 +1,1 @@
+302 -> http://localhost:3000/auth/callback?error=invalid_request&error_description=Missing+parameter%3A+code_challenge_method&iss=http%3A%2F%2Fkeycloak.conote.local%3A8180%2Frealms%2Fconote
