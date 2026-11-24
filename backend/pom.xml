@@ -18,7 +18,6 @@
 
   <properties>
     <java.version>21</java.version>
-    <nimbus.version>9.47</nimbus.version>
   </properties>
 
   <dependencies>
@@ -56,9 +55,8 @@
       <artifactId>flyway-mysql</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.nimbusds</groupId>
-      <artifactId>nimbus-jose-jwt</artifactId>
-      <version>${nimbus.version}</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>

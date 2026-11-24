@@ -21,12 +21,23 @@ public class User {
     @Column(nullable = false, unique = true, length = 100)
     private String username;
 
+    /** Legacy local accounts only. Users created through Keycloak (SSO) have no local password. */
     @JsonIgnore
-    @Column(name = "password_hash", nullable = false, length = 100)
+    @Column(name = "password_hash", length = 100)
     private String passwordHash;
 
     @Column(name = "display_name", length = 200)
     private String displayName;
+
+    /** Keycloak "sub" claim: the permanent link between this row and the institutional identity (D-24). */
+    @Column(name = "external_subject", unique = true, length = 64)
+    private String externalSubject;
+
+    @Column(name = "email", length = 255)
+    private String email;
+
+    @Column(name = "last_login_at")
+    private Instant lastLoginAt;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();

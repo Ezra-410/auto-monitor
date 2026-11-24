@@ -1,0 +1,8 @@
+== readiness (expect UP) ==
+{"status":"UP","components":{"agent":{"status":"UP"},"db":{"status":"UP","details":{"database":"MySQL","validationQuery":"isValid()"}},"readinessState":{"status":"UP"}}}
+== no token (expect 401) ==
+{"error":"unauthorized"} HTTP 401
+== garbage token (expect 401) ==
+{"error":"unauthorized"} HTTP 401
+== REAL Keycloak token from the WRONG realm/audience (expect 401) ==
+{"error":"unauthorized"} HTTP 401

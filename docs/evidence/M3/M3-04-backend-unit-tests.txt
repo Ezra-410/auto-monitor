@@ -1,0 +1,13 @@
+Unable to find image 'maven:3.9-eclipse-temurin-21' locally
+3.9-eclipse-temurin-21: Pulling from library/maven
+Digest: sha256:99e61abcff91a9b1333463bd8451fb18495d6eba9250ac66a338b518f8278320
+Status: Downloaded newer image for maven:3.9-eclipse-temurin-21
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (/root/.m2/repository/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+17:58:35.548 [main] INFO com.monitor.backend.security.UserProvisioningService -- Creating Co-Note profile for 'student01' (sub=kc-sub-1)
+17:58:35.629 [main] WARN com.monitor.backend.security.UserProvisioningService -- SSO login refused: username 'student01' already belongs to a local account (sub=kc-sub-1)
+17:58:35.702 [main] INFO com.monitor.backend.security.UserProvisioningService -- Creating Co-Note profile for 'student01' (sub=kc-sub-1)
