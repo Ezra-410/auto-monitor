@@ -1,0 +1,2 @@
+302
+http://keycloak.conote.local:8180/realms/conote/protocol/openid-connect/auth?response_type=code&client_id=conote-portal&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback&scope=openid+profile+email&state=uBuh1zeSlhsg037XUp1c3GC_IM3I2Nj9c5iSCsgKpJM&nonce=6nMNqicYxtr6QpcGIaOOmFAOPQsHk_UBv71OYFAhVb8&code_challenge=PMPe4wOTDyJAWR7LrwNPvNdjRWhpzdwjn0WH2DfZov8&code_challenge_method=S256

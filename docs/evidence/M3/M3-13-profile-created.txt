@@ -1,0 +1,3 @@
+id	username	display_name	email	external_subject	last_login_at
+1	admin	Administrateur	NULL	NULL	NULL
+2	student01	Amina Bello	student01@conote.edu	e74975ae-ec35-42ef-8c5c-3413e390232f	2026-11-25 15:36:28
