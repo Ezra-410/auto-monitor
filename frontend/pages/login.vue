@@ -1,62 +1,46 @@
 <script setup lang="ts">
 definePageMeta({ layout: false })
 
+const route = useRoute()
 const { login } = useAuth()
-const username = ref('')
-const password = ref('')
-const error = ref('')
-const pending = ref(false)
 
-async function submit() {
-  error.value = ''
-  pending.value = true
-  try {
-    await login(username.value, password.value)
-    await navigateTo('/')
-  } catch {
-    error.value = 'Identifiants invalides'
-  } finally {
-    pending.value = false
-  }
+const errors: Record<string, string> = {
+  state_mismatch: 'La réponse de connexion ne correspond pas à votre demande (state). Réessayez.',
+  invalid_id_token: "Le jeton d'identité a été rejeté (signature, émetteur, audience, expiration ou nonce).",
+  token_exchange_failed: "L'échange du code d'autorisation a échoué.",
+  access_denied: 'Connexion annulée ou refusée.',
 }
+const error = computed(() => {
+  const code = route.query.error
+  return typeof code === 'string' ? (errors[code] ?? `Échec de la connexion (${code}).`) : ''
+})
+const loggedOut = computed(() => route.query.loggedOut)
 </script>
 
 <template>
   <div class="flex min-h-screen items-center justify-center bg-gray-950 px-4">
-    <form
-      class="w-full max-w-sm rounded-2xl border border-gray-800 bg-gray-900 p-8 shadow-xl"
-      @submit.prevent="submit"
-    >
-      <h1 class="mb-1 text-xl font-bold text-white">Moniteur Produit</h1>
-      <p class="mb-6 text-sm text-gray-400">Connectez-vous pour discuter avec l'agent.</p>
+    <div class="w-full max-w-sm rounded-2xl border border-gray-800 bg-gray-900 p-8 shadow-xl">
+      <h1 class="mb-1 text-xl font-bold text-white">Co-Note</h1>
+      <p class="mb-6 text-sm text-gray-400">
+        Connexion unique (SSO) avec votre compte institutionnel.
+      </p>
 
-      <label class="mb-1 block text-xs font-medium text-gray-400">Nom d'utilisateur</label>
-      <input
-        v-model="username"
-        type="text"
-        required
-        autocomplete="username"
-        class="mb-4 w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white outline-none focus:border-indigo-500"
-      >
-
-      <label class="mb-1 block text-xs font-medium text-gray-400">Mot de passe</label>
-      <input
-        v-model="password"
-        type="password"
-        required
-        autocomplete="current-password"
-        class="mb-6 w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white outline-none focus:border-indigo-500"
-      >
-
+      <p v-if="loggedOut === 'local'" class="mb-4 text-sm text-amber-300">
+        Vous êtes déconnecté de Co-Note uniquement. Votre session institutionnelle (Keycloak) est
+        toujours active : la prochaine connexion ne demandera pas de mot de passe.
+      </p>
+      <p v-else-if="loggedOut === 'full'" class="mb-4 text-sm text-emerald-300">
+        Vous êtes déconnecté.
+      </p>
       <p v-if="error" class="mb-4 text-sm text-red-400">{{ error }}</p>
 
       <button
-        type="submit"
-        :disabled="pending"
-        class="w-full rounded-lg bg-indigo-600 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-50"
+        type="button"
+        class="w-full rounded-lg bg-indigo-600 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500"
+        @click="login('/')"
       >
-        {{ pending ? 'Connexion…' : 'Se connecter' }}
+        Se connecter avec votre compte institutionnel
       </button>
-    </form>
+    </div>
   </div>
 </template>

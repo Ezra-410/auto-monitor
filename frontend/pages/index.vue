@@ -1,9 +1,9 @@
 <script setup lang="ts">
 definePageMeta({ middleware: 'auth' })
 
-const { token, user, loadFromStorage, fetchMe, logout } = useAuth()
+const { user, logout, wsToken } = useAuth()
 const ws = useWs()
-const chat = useChat(token, ws)
+const chat = useChat(ws)
 
 const input = ref('')
 const threadEl = ref<HTMLElement | null>(null)
@@ -12,13 +12,8 @@ const currentProject = computed(() =>
   chat.projects.value.find((p) => p.id === chat.currentProjectId.value))
 
 onMounted(async () => {
-  loadFromStorage()
-  if (!token.value) {
-    await navigateTo('/login')
-    return
-  }
-  await fetchMe()
-  ws.connect(token.value)
+  // The auth middleware already guaranteed a Keycloak session (no token handling in the browser).
+  ws.connect(wsToken)
   ws.on(chat.handleEvent)
   await chat.loadProjects()
   scrollToBottom()
@@ -66,8 +61,16 @@ function submit() {
           <span class="h-2 w-2 rounded-full" :class="ws.connected.value ? 'bg-emerald-400' : 'bg-gray-500'" />
           {{ ws.connected.value ? 'temps réel' : 'hors ligne' }}
         </span>
-        <span class="text-gray-400">{{ user?.username }}</span>
-        <button class="text-gray-400 hover:text-white" @click="logout">Déconnexion</button>
+        <span class="text-gray-400" :title="user?.email">
+          {{ user?.display_name || user?.username }}
+          <span v-if="user?.groups?.length" class="text-gray-500">({{ user.groups.join(', ') }})</span>
+        </span>
+        <button class="text-gray-400 hover:text-white" title="Ends only the Co-Note session" @click="logout('local')">
+          Se déconnecter de Co-Note
+        </button>
+        <button class="text-gray-400 hover:text-white" title="Ends the Keycloak SSO session too" @click="logout('full')">
+          Se déconnecter partout
+        </button>
       </div>
     </header>
 

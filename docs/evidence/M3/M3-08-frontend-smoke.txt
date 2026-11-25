@@ -1,0 +1,13 @@
+== API without session (expect 401) ==
+{"error":"unauthorized"} [401]
+== session without cookie ==
+{"authenticated":false}
+== login redirect (expect Keycloak URL with code_challenge + S256 + state + nonce) ==
+http://keycloak.conote.local:8180/realms/conote/protocol/openid-connect/auth?response_type=code
+   &client_id=conote-portal
+   &redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback
+   &scope=openid+profile+email
+   &state=sPP7FGPLn-9MytpuVfLYRpJHfhQSKw1ToQk34GkfQ-w
+   &nonce=5io5VS4npLjpmuD6aF7SBMp8paXupoK9ffIa7a29OlA
+   &code_challenge=yzwZiRcfgHYMRhpYGSfqhnE_kiGjeyt-gIEpPEcQoKQ
+   &code_challenge_method=S256

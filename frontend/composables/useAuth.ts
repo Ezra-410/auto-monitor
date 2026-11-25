@@ -2,56 +2,46 @@ export interface AuthUser {
   id: number
   username: string
   display_name?: string
+  email?: string
   roles: string[]
+  groups?: string[]
+  student_id?: string
+  department?: string
 }
 
-const TOKEN_KEY = 'monitor_token'
-
+/**
+ * Milestone 3: authentication is done by Keycloak through the Nuxt server (D-21).
+ * The browser never handles tokens: it asks /auth/session who is logged in.
+ */
 export function useAuth() {
-  const token = useState<string | null>('token', () => null)
   const user = useState<AuthUser | null>('user', () => null)
 
-  function loadFromStorage() {
+  async function refresh() {
+    // useRequestFetch forwards the session cookie when this runs during server-side rendering
+    const res = await useRequestFetch()<{ authenticated: boolean; user?: AuthUser }>('/auth/session')
+    user.value = res.authenticated ? (res.user ?? null) : null
     if (import.meta.client) {
-      token.value = localStorage.getItem(TOKEN_KEY)
+      localStorage.removeItem('monitor_token') // clean-up of the pre-SSO token, never used again
     }
+    return user.value
   }
 
-  async function login(username: string, password: string) {
-    const res = await $fetch<{ token: string; user: AuthUser }>('/api/v1/auth/login', {
-      method: 'POST',
-      body: { username, password },
-    })
-    token.value = res.token
-    user.value = res.user
-    if (import.meta.client) {
-      localStorage.setItem(TOKEN_KEY, res.token)
-    }
+  function login(returnTo = '/') {
+    return navigateTo(`/auth/login?returnTo=${encodeURIComponent(returnTo)}`, { external: true })
   }
 
-  async function fetchMe() {
-    if (!token.value) return null
-    try {
-      user.value = await $fetch<AuthUser>('/api/v1/auth/me', {
-        headers: { Authorization: `Bearer ${token.value}` },
-      })
-      return user.value
-    } catch {
-      logout()
-      return null
-    }
+  /** 'full' ends the Keycloak SSO session too; 'local' ends only the Co-Note session. */
+  function logout(mode: 'full' | 'local' = 'full') {
+    return navigateTo(mode === 'local' ? '/auth/logout?scope=local' : '/auth/logout', { external: true })
   }
 
-  function logout() {
-    token.value = null
-    user.value = null
-    if (import.meta.client) {
-      localStorage.removeItem(TOKEN_KEY)
-    }
-    navigateTo('/login')
+  /** Fresh access token for the WebSocket only (kept in memory, never stored). */
+  async function wsToken() {
+    const res = await $fetch<{ token: string }>('/auth/ws-token')
+    return res.token
   }
 
-  const isAuthenticated = computed(() => Boolean(token.value))
+  const isAuthenticated = computed(() => Boolean(user.value))
 
-  return { token, user, isAuthenticated, loadFromStorage, login, fetchMe, logout }
+  return { user, isAuthenticated, refresh, login, logout, wsToken }
 }

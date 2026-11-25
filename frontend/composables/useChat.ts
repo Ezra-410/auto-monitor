@@ -14,7 +14,7 @@ interface Project {
   description?: string
 }
 
-export function useChat(token: Ref<string | null>, ws: ReturnType<typeof useWs>) {
+export function useChat(ws: ReturnType<typeof useWs>) {
   const projects = useState<Project[]>('projects', () => [])
   const currentProjectId = useState<number | null>('current-project', () => null)
   const conversationId = useState<number | null>('conversation-id', () => null)
@@ -22,12 +22,12 @@ export function useChat(token: Ref<string | null>, ws: ReturnType<typeof useWs>)
   const agentTyping = useState<boolean>('agent-typing', () => false)
   const loading = useState<boolean>('chat-loading', () => false)
 
-  const authHeaders = computed(() => ({ Authorization: `Bearer ${token.value}` }))
+  // Milestone 3: no Authorization header here. The browser sends its session cookie and the Nuxt
+  // server attaches the access token (server/middleware/api-proxy.ts).
 
   async function loadProjects() {
-    if (!token.value) return
     try {
-      projects.value = await $fetch<Project[]>('/api/v1/projects', { headers: authHeaders.value })
+      projects.value = await $fetch<Project[]>('/api/v1/projects')
       if (!currentProjectId.value && projects.value.length > 0) {
         await selectProject(projects.value[0].id)
       }
@@ -44,13 +44,11 @@ export function useChat(token: Ref<string | null>, ws: ReturnType<typeof useWs>)
     try {
       const convs = await $fetch<{ id: number }[]>('/api/v1/conversations', {
         params: { project_id: projectId },
-        headers: authHeaders.value,
       })
       conversationId.value = convs[0]?.id ?? null
       if (conversationId.value) {
         const history = await $fetch<any[]>(
-          `/api/v1/conversations/${conversationId.value}/messages`,
-          { headers: authHeaders.value })
+          `/api/v1/conversations/${conversationId.value}/messages`)
         items.value = history.map((m) => ({
           id: `m-${m.id}`,
           kind: 'message',

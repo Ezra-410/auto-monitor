@@ -2,7 +2,8 @@ type EventHandler = (event: { type: string; payload?: any }) => void
 
 /**
  * Connexion WebSocket au ws-gateway avec reconnexion automatique (backoff).
- * Le token JWT est passé en query param (spec §4).
+ * Milestone 3: the Keycloak access token is fetched from /auth/ws-token before EVERY connection
+ * (kept in memory only), so a reconnection never reuses an expired token.
  */
 export function useWs() {
   const connected = useState<boolean>('ws-connected', () => false)
@@ -14,20 +15,21 @@ export function useWs() {
   let reconnectDelay = 1000
   let reconnectTimer: ReturnType<typeof setTimeout> | null = null
   let closedByUser = false
-  let currentUrl: string | null = null
+  let getToken: (() => Promise<string>) | null = null
 
-  function connect(token: string) {
+  function connect(tokenProvider: () => Promise<string>) {
     if (!import.meta.client) return
-    const base = String(runtimeConfig.public.wsUrl || 'ws://localhost:4000')
-    currentUrl = `${base}/ws?token=${encodeURIComponent(token)}`
+    getToken = tokenProvider
     closedByUser = false
     open()
   }
 
-  function open() {
-    if (!currentUrl) return
+  async function open() {
+    if (!getToken || closedByUser) return
+    const base = String(runtimeConfig.public.wsUrl || 'ws://localhost:4000')
     try {
-      ws = new WebSocket(currentUrl)
+      const token = await getToken()
+      ws = new WebSocket(`${base}/ws?token=${encodeURIComponent(token)}`)
     } catch {
       scheduleReconnect()
       return
