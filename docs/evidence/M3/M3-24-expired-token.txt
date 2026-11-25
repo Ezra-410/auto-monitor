@@ -1,0 +1,7 @@
+issued : 18:31:55 UTC
+expires: 18:36:55 UTC
+lifetime: 300 s | aud: ['conote-api', 'account'] | user: teacher01
+--- call at 18:33:12 UTC (valid) ---
+HTTP 200 {"id":3,"username":"teacher01","display_name":"Grace Fon","email":"grace.fon@conote.edu","roles":["USER"],"groups":["tea
+--- call at 18:39:37 UTC (expired) ---
+HTTP 401 {"error":"unauthorized"}
