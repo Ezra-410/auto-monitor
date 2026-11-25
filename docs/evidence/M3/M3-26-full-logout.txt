@@ -1,0 +1,5 @@
+} ]--- after FULL logout ---
+[ ]
+monitor-frontend  | 2026-11-25T18:26:53.339892876Z [oidc] refresh failed, session destroyed
+monitor-frontend  | 2026-11-25T18:27:24.219652580Z [oidc] login ok: teacher01
+monitor-frontend  | 2026-11-25T18:54:51.071140772Z [oidc] login ok: teacher01

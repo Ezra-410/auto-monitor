@@ -1,0 +1,12 @@
+[ {
+  "id" : "KVaeGh-2dlA0H-eufe-PBPJN",
+  "start" : 1795631242000,
+  "lastAccess" : 1795631515000,
+  "clients" : { }
+} ]--- after LOCAL logout ---
+[ {
+  "id" : "KVaeGh-2dlA0H-eufe-PBPJN",
+  "start" : 1795631242000,
+  "lastAccess" : 1795632588000,
+  "clients" : { }
+} ]
