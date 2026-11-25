@@ -1,0 +1,4 @@
+username	display_name	external_subject	last_login_at
+admin	Administrateur	NULL	NULL
+student01	Amina Bello	e74975ae-ec35-42ef-8c5c-3413e390232f	2026-11-25 15:38:00
+teacher01	Grace Fon	b315a028-241a-4952-8474-67903eb2fd3b	2026-11-25 15:38:08
