@@ -1,0 +1,4 @@
+HTTP 400
+Invalid parameter: redirect_uri
+HTTP 400
+Invalid parameter: redirect_uri
