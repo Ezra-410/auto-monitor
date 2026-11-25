@@ -5,7 +5,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
+import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.authorization.AuthorizationManagers;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +23,7 @@ import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
 import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -69,6 +74,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health/**", "/error").permitAll()
                         .requestMatchers("/internal/**").hasAuthority("INTERNAL")
+                        // Milestone 4 (D-28, D-31): scope-based authorization, checked on EVERY request.
+                        // Machine endpoint: service accounts only, with notes:read.
+                        .requestMatchers("/api/v1/sync/**").access(caller("SERVICE", "notes:read"))
+                        // User endpoints: a person (ROLE_USER) whose token carries the right scope.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").access(caller("USER", "profile:read"))
+                        .requestMatchers(HttpMethod.GET, "/api/v1/notes", "/api/v1/notes/**").access(caller("USER", "notes:read"))
+                        .requestMatchers("/api/v1/notes", "/api/v1/notes/**").access(caller("USER", "notes:write"))
+                        // Everything else under /api: any person; never a service account.
+                        .requestMatchers("/api/**").hasRole("USER")
                         .anyRequest().authenticated())
                 // service-to-service calls from the agent keep their shared internal token
                 .addFilterBefore(internalTokenFilter, UsernamePasswordAuthenticationFilter.class)
@@ -80,6 +94,13 @@ public class SecurityConfig {
                         .authenticationEntryPoint(SecurityConfig::unauthorized)
                         .accessDeniedHandler(SecurityConfig::forbidden));
         return http.build();
+    }
+
+    /** Both conditions must hold: the caller's kind (ROLE_USER / ROLE_SERVICE) AND the OAuth scope. */
+    private static AuthorizationManager<RequestAuthorizationContext> caller(String role, String scope) {
+        return AuthorizationManagers.allOf(
+                AuthorityAuthorizationManager.<RequestAuthorizationContext>hasRole(role),
+                AuthorityAuthorizationManager.<RequestAuthorizationContext>hasAuthority("SCOPE_" + scope));
     }
 
     /** 401: no token, or a token that failed validation (who are you?). */
