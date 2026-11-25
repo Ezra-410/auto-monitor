@@ -1,0 +1,5 @@
+monitor-frontend  | 2026-11-25T15:35:32.408124749Z [oidc] login ok: student01
+monitor-frontend  | 2026-11-25T15:36:27.304940453Z [oidc] login ok: student01
+monitor-frontend  | 2026-11-25T15:37:59.625707225Z [oidc] login ok: student01
+monitor-frontend  | 2026-11-25T15:38:07.527316434Z [oidc] login ok: teacher01
+monitor-frontend  | 2026-11-25T15:44:00.415146004Z [oidc] login ok: teacher01

@@ -1,0 +1,3 @@
+dn: uid=teacher01,ou=teachers,dc=conote,dc=edu
+mail: grace.fon@conote.edu
+
