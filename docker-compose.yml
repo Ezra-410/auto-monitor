@@ -64,6 +64,8 @@ services:
   backend:
     build: ./backend
     container_name: monitor-backend
+    ports:
+      - "127.0.0.1:8081:8080"   # M4: Postman from Windows, loopback only (D-32)
     restart: unless-stopped
     depends_on:
       mysql: { condition: service_healthy }

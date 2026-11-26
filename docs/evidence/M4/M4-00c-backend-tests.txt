@@ -1,27 +1,6 @@
-19:26:22.727 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.monitor.backend.api.ApiAuthorizationTest]: ApiAuthorizationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-19:26:25.949 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.monitor.backend.MonitorApplication for test class com.monitor.backend.api.ApiAuthorizationTest
-
-  .   ____          _            __ _ _
- /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
- \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  '  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
-
- :: Spring Boot ::                (v3.4.4)
-
-2026-11-25T19:26:41.536Z  INFO 98 --- [monitor-backend] [           main] c.m.backend.api.ApiAuthorizationTest     : Starting ApiAuthorizationTest using Java 21.0.12.1 with PID 98 (started by root in /build)
-2026-11-25T19:26:41.578Z  INFO 98 --- [monitor-backend] [           main] c.m.backend.api.ApiAuthorizationTest     : No active profile set, falling back to 1 default profile: "default"
-Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
-WARNING: A Java agent has been loaded dynamically (/root/.m2/repository/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar)
-WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
-WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
-WARNING: Dynamic loading of agents will be disallowed by default in a future release
-OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
-2026-11-25T19:27:26.408Z  INFO 98 --- [monitor-backend] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2026-11-25T19:27:26.409Z  INFO 98 --- [monitor-backend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2026-11-25T19:27:26.423Z  INFO 98 --- [monitor-backend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 14 ms
-2026-11-25T19:27:26.719Z  INFO 98 --- [monitor-backend] [           main] c.m.backend.api.ApiAuthorizationTest     : Started ApiAuthorizationTest in 59.436 seconds (process running for 67.052)
-2026-11-25T19:27:29.840Z  INFO 98 --- [monitor-backend] [           main] c.m.b.security.UserProvisioningService   : Creating Co-Note profile for 'student01' (sub=kc-sub-1)
-2026-11-25T19:27:29.917Z  WARN 98 --- [monitor-backend] [           main] c.m.b.security.UserProvisioningService   : SSO login refused: username 'student01' already belongs to a local account (sub=kc-sub-1)
-2026-11-25T19:27:30.006Z  INFO 98 --- [monitor-backend] [           main] c.m.b.security.UserProvisioningService   : Creating Co-Note profile for 'student01' (sub=kc-sub-1)
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 22.57 s -- in com.monitor.backend.api.ApiAuthorizationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in com.monitor.backend.security.AudienceValidatorTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.524 s -- in com.monitor.backend.security.UserProvisioningServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.103 s -- in com.monitor.backend.security.KeycloakJwtConverterTest
+[INFO] Tests run: 23, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
